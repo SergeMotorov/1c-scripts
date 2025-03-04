@@ -104,3 +104,4 @@ async function sleep(ms) {
     }
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+window.fillDataIn1C = fillDataIn1C;

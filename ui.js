@@ -1,10 +1,14 @@
 function createMenu() {
+    // Генерируем случайный ID, чтобы 1С не могла удалить по имени
+    let menuId = 'menu' + Math.floor(Math.random() * 100000);
+    let panelId = 'panel' + Math.floor(Math.random() * 100000);
+
     // Проверяем, нет ли уже меню
-    if (document.getElementById('mainMenu')) return;
+    if (document.getElementById(menuId)) return;
 
     // Создаём квадратное, светло-голубое Меню1 (25x25 пикселей)
     let mainMenu = document.createElement('div');
-    mainMenu.id = 'mainMenu';
+    mainMenu.id = menuId;
     mainMenu.style.position = 'fixed';
     mainMenu.style.top = '20px';
     mainMenu.style.right = '20px';
@@ -25,7 +29,7 @@ function createMenu() {
 
     // Создаём Меню2 (изначально скрытое)
     let controlPanel = document.createElement('div');
-    controlPanel.id = 'controlPanel';
+    controlPanel.id = panelId;
     controlPanel.style.position = 'fixed';
     controlPanel.style.top = '20px';
     controlPanel.style.right = '50px';
@@ -39,6 +43,14 @@ function createMenu() {
     controlPanel.style.gap = '10px';
     controlPanel.style.zIndex = '100001';
     controlPanel.style.fontFamily = 'Segoe UI, sans-serif';
+
+    // Заголовок Меню2
+    let panelTitle = document.createElement('div');
+    panelTitle.textContent = 'Меню управления';
+    panelTitle.style.fontSize = '16px';
+    panelTitle.style.fontWeight = 'bold';
+    panelTitle.style.marginBottom = '10px';
+    controlPanel.appendChild(panelTitle);
 
     // При наведении на Меню2 курсор остаётся активным
     controlPanel.onmouseenter = () => {
@@ -66,4 +78,6 @@ function createMenu() {
     });
     observer.observe(document.body, { childList: true, subtree: true });
 }
-createMenu();
+
+// Запускаем создание меню с задержкой, чтобы 1С не успела удалить его
+setTimeout(createMenu, 3000);

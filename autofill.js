@@ -1,23 +1,24 @@
 async function fetchGoogleSheetData() {
-    const sheetId = "1Jk1eSYAAgYboNAg0nj__6gHyWTuWKwjxZwP0h46zuSI";
-    const gid = "1992885466";
-    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=${gid}`;
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values/${config.range}?key=${config.apiKey}`;
 
     try {
         const response = await fetch(url);
-        const text = await response.text();
-        const json = JSON.parse(text.substring(47, text.length - 2)); // Парсим JSON
-        return json.table.rows.map(row => ({
-            article: row.c[0]?.v || "", 
-            quantity: row.c[1]?.v || "",
-            price: row.c[2]?.v || "",
-            total: row.c[3]?.v || ""
+        const data = await response.json();
+
+        if (!data.values) throw new Error("Нет данных");
+
+        return data.values.map(row => ({
+            article: row[0] || "",
+            quantity: row[1] || "",
+            price: row[2] || "",
+            total: row[3] || ""
         }));
     } catch (error) {
         console.error("Ошибка загрузки данных:", error);
         return [];
     }
 }
+
 async function fillDataIn1C() {
     console.log("🔄 Заполняем данные в 1С...");
     let data = await fetchGoogleSheetData();

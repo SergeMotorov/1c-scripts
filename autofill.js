@@ -1,9 +1,12 @@
 async function fetchGoogleSheetData() {
+    console.log("📡 Загружаем данные из Google Sheets...");
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values/${config.range}?key=${config.apiKey}`;
+    console.log("🔗 URL запроса: ", url);
 
     try {
         const response = await fetch(url);
         const data = await response.json();
+        console.log("✅ Данные загружены:", data);
 
         if (!data.values) throw new Error("Нет данных");
 
@@ -14,7 +17,7 @@ async function fetchGoogleSheetData() {
             total: row[3] || ""
         }));
     } catch (error) {
-        console.error("Ошибка загрузки данных:", error);
+        console.error("❌ Ошибка загрузки данных:", error);
         return [];
     }
 }

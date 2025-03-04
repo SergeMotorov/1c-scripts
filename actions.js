@@ -22,19 +22,21 @@ function addButton(text, id, action) {
 // Добавляем кнопки
 document.addEventListener('DOMContentLoaded', () => {
     addButton("Заполнить данные", "fillDataBtn", () => {
-        if (typeof fillDataIn1C === 'function') {
+        if (!isPaused) {
             fillDataIn1C();
         } else {
-            alert("Функция заполнения данных пока не работает.");
+            alert("Скрипт на паузе. Нажмите 'Продолжить'.");
         }
     });
 
-    let pauseButton = addButton("Пауза", "pauseBtn", () => {
-        let btn = document.getElementById("pauseBtn");
-        if (btn.textContent === "Пауза") {
-            btn.textContent = "Продолжить";
+    addButton("Пауза", "pauseBtn", function () {
+        if (this.textContent === "Пауза") {
+            this.textContent = "Продолжить";
+            pauseScript();
         } else {
-            btn.textContent = "Пауза";
+            this.textContent = "Пауза";
+            resumeScript();
         }
     });
 });
+

@@ -1,12 +1,10 @@
 function createMenu() {
-    // Генерируем случайный ID, чтобы 1С не могла удалить по имени
     let menuId = 'menu' + Math.floor(Math.random() * 100000);
     let panelId = 'panel' + Math.floor(Math.random() * 100000);
 
-    // Проверяем, нет ли уже меню
     if (document.getElementById(menuId)) return;
 
-    // Создаём квадратное, светло-голубое Меню1 (25x25 пикселей)
+    // Создаём квадратное, светло-голубое Меню1 (25x25 пикселей) с анимацией
     let mainMenu = document.createElement('div');
     mainMenu.id = menuId;
     mainMenu.style.position = 'fixed';
@@ -26,6 +24,15 @@ function createMenu() {
     mainMenu.style.fontSize = '14px';
     mainMenu.style.fontWeight = 'bold';
     mainMenu.innerText = '≡';
+    mainMenu.style.transition = 'all 0.3s ease';
+
+    // Добавляем эффект увеличения при наведении
+    mainMenu.onmouseover = () => {
+        mainMenu.style.transform = 'scale(1.2)';
+    };
+    mainMenu.onmouseout = () => {
+        mainMenu.style.transform = 'scale(1)';
+    };
 
     // Создаём Меню2 (изначально скрытое)
     let controlPanel = document.createElement('div');
@@ -51,6 +58,42 @@ function createMenu() {
     panelTitle.style.fontWeight = 'bold';
     panelTitle.style.marginBottom = '10px';
     controlPanel.appendChild(panelTitle);
+
+    // Функция для добавления кнопок с иконками
+    function addButton(text, icon, action) {
+        let button = document.createElement('button');
+        button.style.display = 'flex';
+        button.style.alignItems = 'center';
+        button.style.gap = '8px';
+        button.style.padding = '10px';
+        button.style.border = 'none';
+        button.style.borderRadius = '6px';
+        button.style.cursor = 'pointer';
+        button.style.transition = '0.3s';
+        button.style.fontSize = '14px';
+        button.style.fontWeight = 'bold';
+        button.style.fontFamily = 'Segoe UI, sans-serif';
+        button.style.background = '#0078D7';
+        button.style.color = 'white';
+        button.onmouseover = () => button.style.background = '#0053A6';
+        button.onmouseout = () => button.style.background = '#0078D7';
+        button.onclick = action;
+
+        let btnIcon = document.createElement('span');
+        btnIcon.innerHTML = icon;
+        button.appendChild(btnIcon);
+
+        let btnText = document.createElement('span');
+        btnText.textContent = text;
+        button.appendChild(btnText);
+
+        controlPanel.appendChild(button);
+    }
+
+    // Добавляем кнопки в Меню2
+    addButton("Обновить", "🔄", () => location.reload());
+    addButton("Заполнить форму", "📝", () => alert("Форма будет заполнена"));
+    addButton("Настройки", "⚙️", () => alert("Открыть настройки"));
 
     // При наведении на Меню2 курсор остаётся активным
     controlPanel.onmouseenter = () => {
@@ -79,5 +122,5 @@ function createMenu() {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
-// Запускаем создание меню с задержкой, чтобы 1С не успела удалить его
+// Запускаем создание меню
 setTimeout(createMenu, 3000);

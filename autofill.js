@@ -32,11 +32,19 @@ async function fillDataIn1C() {
         if (!article) continue; // Пропускаем пустые строки
 
         // 2.0 Создаём новую строку
-        let addRowBtn = document.querySelector("[id^='form'][id$='_ТоварыДобавить'] > span");
         if (addRowBtn) {
-            addRowBtn.click();
-            await sleep(500);
-        }
+    let event = new MouseEvent("mousedown", { bubbles: true, cancelable: true, view: window });
+    addRowBtn.dispatchEvent(event);
+
+    setTimeout(() => {
+        let eventUp = new MouseEvent("mouseup", { bubbles: true, cancelable: true, view: window });
+        addRowBtn.dispatchEvent(eventUp);
+        console.log("✅ Кнопка 'Добавить товар' нажата");
+    }, 100);
+} else {
+    console.error("❌ Кнопка 'Добавить товар' не найдена! Проверь селектор.");
+}
+
 
         // 2.1 Проверяем, что выбрано поле артикула
         let articleField = document.querySelector("#grid_form2_Товары .gridLine.select.eActivityBack > div:nth-child(2) > div > div");
